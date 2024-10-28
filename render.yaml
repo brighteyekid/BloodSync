@@ -3,8 +3,8 @@ services:
     name: bloodsync-backend
     env: docker
     plan: free
-    rootDir:     rootDir: backened/backened/demo  # This is where your Dockerfile is
-    dockerfilePath: backened/backened/demo/Dockerfile
+    rootDir: backened/backened/demo  # This is where your Dockerfile is
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /api/actuator/health
     envVars:
       - key: SPRING_PROFILES_ACTIVE

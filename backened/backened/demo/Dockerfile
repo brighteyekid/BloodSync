@@ -2,20 +2,21 @@ FROM eclipse-temurin:17-jdk-alpine
 
 WORKDIR /app
 
-# Copy the entire demo directory
-COPY . .
+# Copy gradle files first
+COPY build.gradle settings.gradle ./
+COPY gradle gradle/
+COPY gradlew .
 
-# Install necessary tools
-RUN apk add --no-cache bash
+# Make gradlew executable
+RUN chmod +x gradlew
 
-# Make gradlew executable and build
-RUN chmod +x ./gradlew && \
+# Copy source code
+COPY src src/
+
+# Install necessary tools and build
+RUN apk add --no-cache bash && \
     ./gradlew build -x test
-
-# Add health check
-HEALTHCHECK --interval=30s --timeout=3s \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/api/actuator/health || exit 1
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "build/libs/*.jar"]
+CMD ["java", "-jar", "build/libs/demo-0.0.1-SNAPSHOT.jar"]
