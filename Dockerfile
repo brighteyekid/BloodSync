@@ -1,15 +1,14 @@
 FROM eclipse-temurin:17-jdk-alpine
 
-# Add curl for health check
-RUN apk add --no-cache curl
-
 WORKDIR /app
 
 # Copy the jar file
-COPY demo/build/libs/*.jar app.jar
+COPY build/libs/app.jar app.jar
 
-# Add health check
+# Add health check with correct path
 HEALTHCHECK --interval=30s --timeout=3s \
-  CMD curl -f http://localhost:8080/actuator/health || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/api/actuator/health || exit 1
+
+EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

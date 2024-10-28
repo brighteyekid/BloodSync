@@ -2,9 +2,10 @@ services:
   - type: web
     name: bloodsync-backend
     env: docker
-    buildCommand: ./gradlew buildForProduction
-    startCommand: java -jar demo/build/libs/*.jar
-    healthCheckPath: /actuator/health
+    plan: free
+    buildCommand: cd backened/backened/demo && ./gradlew build
+    startCommand: java -jar backened/backened/demo/build/libs/app.jar
+    healthCheckPath: /api/actuator/health
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
