@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: bloodsync-backend
+    env: docker
+    plan: free
+    rootDir: .
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DATABASE_URL
+        value: jdbc:postgresql://aws-0-ap-south-1.pooler.supabase.com:5432/postgres
+      - key: DATABASE_USER
+        sync: false
+      - key: DATABASE_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+
