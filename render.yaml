@@ -3,7 +3,7 @@ services:
     name: bloodsync-backend
     env: docker
     plan: free
-    rootDir: .
+    rootDir:     rootDir: backened/backened/demo  # This is where your Dockerfile is
     dockerfilePath: backened/backened/demo/Dockerfile
     healthCheckPath: /api/actuator/health
     envVars:
