@@ -1,12 +1,32 @@
 # Build stage
 FROM eclipse-temurin:17-jdk-alpine AS builder
 WORKDIR /build
-COPY . .
+
+# Install necessary build tools
+RUN apk add --no-cache bash
+
+# Copy gradle files first for better caching
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle .
+COPY settings.gradle .
+
+# Make gradlew executable
+RUN chmod +x ./gradlew
+
+# Copy source code
+COPY src src
+
+# Build
 RUN ./gradlew build -x test
 
 # Run stage
 FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
+
+# Install wget for health check
+RUN apk add --no-cache wget
+
 COPY --from=builder /build/build/libs/app.jar app.jar
 
 # Add health check with correct path
