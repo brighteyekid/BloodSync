@@ -1,9 +1,13 @@
+# Build stage
+FROM eclipse-temurin:17-jdk-alpine AS builder
+WORKDIR /build
+COPY . .
+RUN ./gradlew build -x test
+
+# Run stage
 FROM eclipse-temurin:17-jdk-alpine
-
 WORKDIR /app
-
-# Copy the jar file
-COPY build/libs/app.jar app.jar
+COPY --from=builder /build/build/libs/app.jar app.jar
 
 # Add health check with correct path
 HEALTHCHECK --interval=30s --timeout=3s \
