@@ -5,17 +5,14 @@ WORKDIR /build
 # Install necessary build tools
 RUN apk add --no-cache bash
 
-# Copy gradle files first for better caching
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
+# Copy the entire demo directory
+COPY demo demo/
+
+# Set working directory to demo
+WORKDIR /build/demo
 
 # Make gradlew executable
 RUN chmod +x ./gradlew
-
-# Copy source code
-COPY src src
 
 # Build
 RUN ./gradlew build -x test
@@ -27,7 +24,8 @@ WORKDIR /app
 # Install wget for health check
 RUN apk add --no-cache wget
 
-COPY --from=builder /build/build/libs/app.jar app.jar
+# Copy JAR from the correct location
+COPY --from=builder /build/demo/build/libs/app.jar app.jar
 
 # Add health check with correct path
 HEALTHCHECK --interval=30s --timeout=3s \

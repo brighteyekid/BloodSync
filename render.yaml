@@ -3,7 +3,7 @@ services:
     name: bloodsync-backend
     env: docker
     plan: free
-    rootDir: backened/backened/demo
+    rootDir: backened/backened
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
