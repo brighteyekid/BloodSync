@@ -3,7 +3,8 @@ services:
     name: bloodsync-backend
     env: docker
     plan: free
-    rootDir: .
+    rootDir: backened/backened/demo  # Update this path
+    buildCommand: ./gradlew build -x test  # Add explicit build command
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
@@ -15,4 +16,3 @@ services:
         sync: false
       - key: JWT_SECRET
         sync: false
-
