@@ -1,10 +1,14 @@
-FROM gradle:7.6.1-jdk11-alpine AS build
-COPY --chown=gradle:gradle . /home/gradle/src
-WORKDIR /home/gradle/src
-RUN gradle build --no-daemon
+FROM eclipse-temurin:17-jdk-alpine
 
-FROM openjdk:11-jre-slim
+WORKDIR /app
+
+# Copy the jar file
+COPY build/libs/app.jar app.jar
+
+# Add health check
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
+
 EXPOSE 8080
-RUN mkdir /app
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/spring-boot-application.jar
-ENTRYPOINT ["java", "-jar", "/app/spring-boot-application.jar"]
+
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
