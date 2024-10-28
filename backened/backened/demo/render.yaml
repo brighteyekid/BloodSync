@@ -3,8 +3,8 @@ services:
     name: bloodsync-backend
     env: docker
     plan: free
-    rootDir: backened/backened/demo  # Update this path
-    buildCommand: ./gradlew build -x test  # Add explicit build command
+    rootDir: backened/backened/demo
+    healthCheckPath: /api/actuator/health
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
